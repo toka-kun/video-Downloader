@@ -240,6 +240,7 @@
 <script>
     let currentUrl = '';
     let currentUsedProxy = false;
+    let currentTitle = '';
 
     async function fetchFormats() {
         const url = document.getElementById('videoUrl').value;
@@ -276,6 +277,8 @@
                 statusEl.innerText = "";
                 document.getElementById('videoTitle').innerHTML = `<strong>動画:</strong> ${data.title}`;
                 currentUsedProxy = !!data.usedProxy;
+                currentTitle = data.title || '';
+                currentUrl = data.normalizedUrl || url;
                 
                 const select = document.getElementById('formatSelect');
                 select.innerHTML = '';
@@ -329,7 +332,7 @@
         let currentPhase = '映像';
         let lastPercent = 0;
 
-        const sseUrl = `/api/download-stream?url=${encodeURIComponent(currentUrl)}&format=${formatId}&proxy=${currentUsedProxy}`;
+        const sseUrl = `/api/download-stream?url=${encodeURIComponent(currentUrl)}&format=${formatId}&proxy=${currentUsedProxy}&title=${encodeURIComponent(currentTitle)}`;
         const eventSource = new EventSource(sseUrl);
 
         eventSource.onmessage = (event) => {
