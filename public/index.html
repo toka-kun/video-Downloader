@@ -307,6 +307,13 @@
                     select.appendChild(option);
                 });
 
+                const preferred1080 = sortedKeys.find(k => String(k) === '1080');
+                if (preferred1080) {
+                    select.value = uniqueFormats[preferred1080].id;
+                } else if (uniqueFormats['best']) {
+                    select.value = uniqueFormats['best'].id;
+                }
+
                 downloadSection.classList.remove('hidden');
             } else {
                 statusEl.innerHTML = `<div class="error-detail">⚠️ エラー: ${data.error}</div>`;

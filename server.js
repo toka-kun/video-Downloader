@@ -98,6 +98,8 @@ app.post("/api/info", async (req, res) => {
   if (isYouTube) {
     logInfo(`[YouTube] プロキシ使用で取得`);
     result = await runYtDlp([
+      "--js-runtimes",
+      "node",
       "--proxy",
       PROXY_URL,
       "--dump-json",
@@ -106,11 +108,18 @@ app.post("/api/info", async (req, res) => {
     usedProxy = true;
   } else {
     logInfo(`[通常] プロキシなしで取得`);
-    result = await runYtDlp(["--dump-json", normalizedUrl]);
+    result = await runYtDlp([
+      "--js-runtimes",
+      "node",
+      "--dump-json",
+      normalizedUrl,
+    ]);
 
     if (result.code !== 0) {
       logInfo(`[再試行] プロキシ使用`);
       result = await runYtDlp([
+        "--js-runtimes",
+        "node",
         "--proxy",
         PROXY_URL,
         "--dump-json",
