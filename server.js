@@ -99,7 +99,7 @@ app.post("/api/info", async (req, res) => {
     logInfo(`[YouTube] プロキシ使用で取得`);
     result = await runYtDlp([
       "--js-runtimes",
-      "node",
+      `node:${process.execPath}`,
       "--proxy",
       PROXY_URL,
       "--dump-json",
@@ -110,7 +110,7 @@ app.post("/api/info", async (req, res) => {
     logInfo(`[通常] プロキシなしで取得`);
     result = await runYtDlp([
       "--js-runtimes",
-      "node",
+      `node:${process.execPath}`,
       "--dump-json",
       normalizedUrl,
     ]);
@@ -119,7 +119,7 @@ app.post("/api/info", async (req, res) => {
       logInfo(`[再試行] プロキシ使用`);
       result = await runYtDlp([
         "--js-runtimes",
-        "node",
+        `node:${process.execPath}`,
         "--proxy",
         PROXY_URL,
         "--dump-json",
@@ -218,6 +218,9 @@ app.get("/api/download-stream", (req, res) => {
   if (useProxy) {
     args.push("--proxy", PROXY_URL);
   }
+
+  args.push("--js-runtimes", `node:${process.execPath}`);
+
   args.push(
     "-f",
     format === "best" ? "bestvideo+bestaudio/best" : `${format}+bestaudio/best`,
